@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { computed, Injectable, signal } from '@angular/core';
 import { Todo } from '../model/todo';
 import { LoggerService } from '../../services/logger.service';
 
@@ -8,7 +8,20 @@ let n = 1;
   providedIn: 'root',
 })
 export class TodoService {
-  private todos: Todo[] = [];
+  todos = signal<Todo[]>([]);
+
+  waitingTodos = computed(() =>
+    this.todos().filter((todo) => todo.status === 'waiting')
+  );
+
+  inProgressTodos = computed(() =>
+    this.todos().filter((todo) => todo.status === 'in progress')
+  );
+
+  doneTodos = computed(() =>
+    this.todos().filter((todo) => todo.status === 'done')
+  );
+
   constructor(private loggerService: LoggerService) {}
 
   /**
@@ -17,7 +30,7 @@ export class TodoService {
    * @returns Todo[]
    */
   getTodos(): Todo[] {
-    return this.todos;
+    return this.todos();
   }
 
   /**
@@ -26,9 +39,10 @@ export class TodoService {
    * @param todo: Todo
    *
    */
-  addTodo(todo: Todo): void {
-    this.todos.push(todo);
+   addTodo(todo: Todo): void {
+    this.todos.update((todos) => [...todos, todo]);
   }
+  
 
   /**
    * Delete le todo s'il existe
@@ -37,9 +51,9 @@ export class TodoService {
    * @returns boolean
    */
   deleteTodo(todo: Todo): boolean {
-    const index = this.todos.indexOf(todo);
+    const index = this.todos().indexOf(todo);
     if (index > -1) {
-      this.todos.splice(index, 1);
+      this.todos.update((todos) => todos.filter((t) => t !== todo));
       return true;
     }
     return false;
@@ -50,5 +64,38 @@ export class TodoService {
    */
   logTodos() {
     this.loggerService.logger(this.todos);
+  }
+
+
+  nextStatus(todo: Todo): void {
+    let nextStatus: 'waiting' | 'in progress' | 'done' | null = null;
+    
+    switch (todo.status) {
+      case 'waiting':
+        nextStatus = 'in progress';
+        break;
+      case 'in progress':
+        nextStatus = 'done';
+        break;
+    }
+    
+    if (nextStatus) {
+      this.todos.update((todos) =>
+        todos.map((t) => (t === todo ? { ...t, status: nextStatus } : t))
+      );
+    }
+  }
+
+  getByStatus(status: 'waiting' | 'in progress' | 'done'): Todo[] {
+    switch (status) {
+      case 'waiting':
+        return this.waitingTodos();
+      case 'in progress':
+        return this.inProgressTodos();
+      case 'done':
+        return this.doneTodos();
+      default:
+        return [];
+    }
   }
 }
