@@ -1,11 +1,12 @@
 import { Component, Input, OnInit, inject } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-
+import {ArcEnCielDirective} from "../../directives/arc-en-ciel.directive"
 @Component({
     selector: "app-color",
     templateUrl: "./color.component.html",
     styleUrls: ["./color.component.css"],
     standalone: true,
+    imports : [ArcEnCielDirective]
 })
 export class ColorComponent implements OnInit {
   private activatedRoute = inject(ActivatedRoute);
