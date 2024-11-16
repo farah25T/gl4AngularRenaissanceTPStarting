@@ -42,7 +42,8 @@
             <li *ngFor="let todo of getByStatus('in progress')" class="list-group-item">
               {{todo.name}} : {{todo.content}}
               <i (click)="deleteTodo(todo)" class="fa fa-trash" aria-hidden="true"></i>
-              <button class="bg-green-500 text-white font-bold px-4 py-1 rounded" (click)="next(todo)">Done</button>
+              <button class="bg-green-500 text-white font-bold px-4 py-1 rounded" (click)="previous(todo)">previous</button>
+              <button class="bg-green-500 text-white font-bold px-4 py-1 rounded" (click)="next(todo)">next</button>
             </li>
           </ol>
       </div>
@@ -53,6 +54,7 @@
             <li *ngFor="let todo of getByStatus('done')" class="list-group-item">
               {{todo.name}} : {{todo.content}}
               <i (click)="deleteTodo(todo)" class="fa fa-trash" aria-hidden="true"></i>
+              <button class="bg-green-500 text-white font-bold px-4 py-1 rounded" (click)="previous(todo)">previous</button>
             </li>
           </ol>
       </div>

@@ -86,6 +86,25 @@ export class TodoService {
     }
   }
 
+  previousStatus(todo: Todo): void {
+    let nextStatus: 'waiting' | 'in progress' | 'done' | null = null;
+    
+    switch (todo.status) {
+      case 'in progress':
+        nextStatus = 'waiting';
+        break;
+      case 'done':
+        nextStatus = 'in progress';
+        break;
+    }
+    
+    if (nextStatus) {
+      this.todos.update((todos) =>
+        todos.map((t) => (t === todo ? { ...t, status: nextStatus } : t))
+      );
+    }
+  }
+
   getByStatus(status: 'waiting' | 'in progress' | 'done'): Todo[] {
     switch (status) {
       case 'waiting':

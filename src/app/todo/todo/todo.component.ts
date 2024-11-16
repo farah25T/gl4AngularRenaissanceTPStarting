@@ -5,17 +5,18 @@ import { ToastrService } from 'ngx-toastr';
 import { NgFor } from '@angular/common';
 
 @Component({
-  selector: 'app-todo',
-  templateUrl: './todo.component.html',
-  styleUrls: ['./todo.component.css'],
-  providers: [TodoService],
+    selector: 'app-todo',
+    templateUrl: './todo.component.html',
+    styleUrls: ['./todo.component.css'],
+    providers: [TodoService],
+    standalone: true,
+    imports: [NgFor],
 })
 export class TodoComponent {
 
   name: WritableSignal<string> = signal('');
   content: WritableSignal<string> = signal('');
   todos: Todo[] = [];
-  todo = new Todo();
 
   toastr = inject(ToastrService);
 
@@ -30,10 +31,11 @@ export class TodoComponent {
     this.content.set(content);
   }
   addTodo() {
-    this.todo.name = this.name();
-    this.todo.content = this.content();
-    this.todo.status = 'waiting';
-    this.todoService.addTodo(this.todo);
+    const todo = new Todo();
+    todo.name = this.name();
+    todo.content = this.content();
+    todo.status = 'waiting';
+    this.todoService.addTodo(todo);
     this.toastr.success('Todo added successfully!', 'Success');
   }
   deleteTodo(todo: Todo) {
@@ -42,6 +44,9 @@ export class TodoComponent {
   }
   next(todo: Todo) {
     this.todoService.nextStatus(todo);
+  }
+  previous(todo: Todo) {
+    this.todoService.previousStatus(todo);
   }
   getByStatus(status: 'waiting' | 'in progress' | 'done') {
     return this.todoService.getByStatus(status);
