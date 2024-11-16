@@ -8,7 +8,7 @@ import { NgFor } from '@angular/common';
   selector: 'app-todo',
   templateUrl: './todo.component.html',
   styleUrls: ['./todo.component.css'],
-  providers: [TodoService, NgFor],
+  providers: [TodoService],
 })
 export class TodoComponent {
 
