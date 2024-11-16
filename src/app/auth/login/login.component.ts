@@ -5,7 +5,7 @@ import { ROUTES, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { APP_ROUTES } from '../../../config/routes.config';
 import { FormsModule } from '@angular/forms';
-
+import {token } from "../../../config/const.config"
 
 @Component({
     selector: 'app-login',
@@ -22,7 +22,7 @@ export class LoginComponent {
   login(credentials: CredentialsDto) {
     this.authService.login(credentials).subscribe({
       next: (response) => {
-        localStorage.setItem('token', response.id);
+        localStorage.setItem(token, response.id);
         this.toastr.success(`Bienvenu chez vous :)`);
         this.router.navigate([APP_ROUTES.cv]);
       },
