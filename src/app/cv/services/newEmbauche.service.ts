@@ -1,6 +1,9 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Cv } from '../model/cv';
 import { SignalService } from 'src/app/services/signal.service';
+import { catchError, Observable, tap } from 'rxjs';
+import { API } from 'src/config/api.config';
+import { HttpClient } from '@angular/common/http';
 
 export interface CvTraitement {
   cvs: Cv[];
@@ -11,15 +14,15 @@ export interface CvTraitement {
   providedIn: 'root',
 })
 export class NewEmbaucheService extends SignalService<CvTraitement> {
+  http = inject(HttpClient);
+
   constructor() {
     super({
       selectedCv: null,
-      cvs: [
-        new Cv(1, 'aymen', 'sellaouti', 'teacher', 'as.jpg', '1234', 40),
-        new Cv(2, 'skander', 'sellaouti', 'enfant', '       ', '1234', 4),
-      ],
+      cvs: [],
       embauche: [],
     });
+    this.fetchCvs();
   }
 
   /**
@@ -30,7 +33,7 @@ export class NewEmbaucheService extends SignalService<CvTraitement> {
    *
    */
   getFakeCvs(): Cv[] {
-    return this.state().cvs;
+    return this.get('cvs')();
   }
 
   /**
@@ -38,21 +41,19 @@ export class NewEmbaucheService extends SignalService<CvTraitement> {
    *
    * @param cv : Le cv à ajouter dans le flux des cvs sélectionnés
    */
-  selectCv(cv: Cv) {
-    if (cv !== null) {
-      this.set('selectedCv', cv);
-    }
+  selectCv(cv: Cv | null) {
+    this.set('selectedCv', cv);
   }
 
   getselectedCv(): Cv | null {
-    return this.state().selectedCv;
+    return this.get('selectedCv')();
   }
   /**
    * Retrieves the list of embauchees from the current state.
    * This provides a snapshot of the current value.
    */
   getEmbauchees(): Cv[] {
-    return this.state().embauche;
+    return this.get('embauche')();
   }
 
   /**
@@ -65,10 +66,59 @@ export class NewEmbaucheService extends SignalService<CvTraitement> {
    */
 
   embauche(cv: Cv): boolean {
-    if (this.state().embauche.indexOf(cv) == -1) {
-      this.set('embauche', [...this.state().embauche, cv]);
+    if (this.get('embauche')().indexOf(cv) == -1) {
+      this.set('embauche', [...this.get('embauche')(), cv]);
       return true;
     }
     return false;
+  }
+
+  /**
+   * Fetches CVs from the API and returns an Observable.
+   *
+   * @returns Observable<Cv[]>
+   */
+  fetchCvs(): void {
+    this.http.get<Cv[]>(API.cv).subscribe({
+      next: (cvs) => {
+        this.set('cvs', cvs);
+      },
+      error: (err) => {
+        console.error('Failed to fetch CVs', err);
+      },
+    });
+  }
+
+  /**
+   * Add a new cv */
+  addCv(cv: Cv): Observable<Cv> {
+    return this.http.post<Cv>(API.cv, cv).pipe(
+      tap((newCv) => {
+        this.set('cvs', [...this.get('cvs')(), newCv]);
+      }),
+      catchError((err) => {
+        console.error('Failed to add CV', err);
+        throw err; // Re-throw the error so the caller can handle it
+      })
+    );
+  }
+
+  /**
+   *
+   * Retourne un cv par son id de l'API
+   *
+   * @param id: number
+   * @returns CV[]
+   *
+   */
+  getCvById(id: number): Observable<Cv> {
+    return this.http.get<Cv>(API.cv + id);
+  }
+
+  deleteCvById(id: number): Observable<any> {
+    const updatedCvs = this.get('cvs')().filter((cv) => cv.id !== id);
+    console.log('updatedCvs', updatedCvs);
+    this.set('cvs', updatedCvs);
+    return this.http.delete<any>(`${API.cv}/${id}`);
   }
 }

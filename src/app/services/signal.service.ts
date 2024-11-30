@@ -1,10 +1,10 @@
 import { computed, Signal, signal } from '@angular/core';
 
 export class SignalService<T> {
-  readonly state = signal({} as T);
+  readonly #state = signal({} as T);
 
   constructor(initialState: T) {
-    this.state.set(initialState);
+    this.#state.set(initialState);
   }
 
   /**
@@ -14,7 +14,7 @@ export class SignalService<T> {
    * @param data - the new data to be saved
    */
   public set<K extends keyof T>(key: K, data: T[K]) {
-    this.state.update((currentValue) => ({ ...currentValue, [key]: data }));
+    this.#state.update((currentValue) => ({ ...currentValue, [key]: data }));
   }
 
   /**
@@ -26,7 +26,7 @@ export class SignalService<T> {
    *                      the new value to be saved
    */
   public setState(partitialState: Partial<T>) {
-    this.state.update((currentValue) => ({
+    this.#state.update((currentValue) => ({
       ...currentValue,
       ...partitialState,
     }));
@@ -38,6 +38,6 @@ export class SignalService<T> {
    * @param key - the key of the property to be retrieved
    */
   public get<K extends keyof T>(key: K): Signal<T[K]> {
-    return computed(() => this.state()[key]);
+    return computed(() => this.#state()[key]);
   }
 }

@@ -6,6 +6,7 @@ import { ToastrService } from "ngx-toastr";
 import { APP_ROUTES } from "src/config/routes.config";
 import { Cv } from "../model/cv";
 import { JsonPipe } from "@angular/common";
+import { NewEmbaucheService } from "../services/newEmbauche.service";
 
 @Component({
     selector: "app-add-cv",
@@ -19,7 +20,7 @@ import { JsonPipe } from "@angular/common";
 ],
 })
 export class AddCvComponent {
-  private cvService = inject(CvService);
+  private cvService = inject(NewEmbaucheService);
   private router = inject(Router);
   private toastr = inject(ToastrService);
   private formBuilder = inject(FormBuilder);
@@ -47,6 +48,7 @@ export class AddCvComponent {
   );
 
   addCv() {
+    console.log("azdaz")
     this.cvService.addCv(this.form.value as Cv).subscribe({
       next: (cv) => {
         this.router.navigate([APP_ROUTES.cv]);
