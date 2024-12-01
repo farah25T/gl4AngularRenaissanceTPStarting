@@ -22,7 +22,6 @@ export class NewEmbaucheService extends SignalService<CvTraitement> {
       cvs: [],
       embauche: [],
     });
-    this.fetchCvs();
   }
 
   /**
@@ -92,15 +91,7 @@ export class NewEmbaucheService extends SignalService<CvTraitement> {
   /**
    * Add a new cv */
   addCv(cv: Cv): Observable<Cv> {
-    return this.http.post<Cv>(API.cv, cv).pipe(
-      tap((newCv) => {
-        this.set('cvs', [...this.get('cvs')(), newCv]);
-      }),
-      catchError((err) => {
-        console.error('Failed to add CV', err);
-        throw err; // Re-throw the error so the caller can handle it
-      })
-    );
+    return this.http.post<Cv>(API.cv, cv);
   }
 
   /**
@@ -116,9 +107,6 @@ export class NewEmbaucheService extends SignalService<CvTraitement> {
   }
 
   deleteCvById(id: number): Observable<any> {
-    const updatedCvs = this.get('cvs')().filter((cv) => cv.id !== id);
-    console.log('updatedCvs', updatedCvs);
-    this.set('cvs', updatedCvs);
     return this.http.delete<any>(`${API.cv}/${id}`);
   }
 }

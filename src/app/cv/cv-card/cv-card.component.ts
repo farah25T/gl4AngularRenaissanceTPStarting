@@ -17,13 +17,10 @@ export class CvCardComponent {
   private embaucheService = inject(NewEmbaucheService);
   private toastr = inject(ToastrService);
 
-  cv: Cv | null = null;
+  @Input() cv: Cv | null = null;
 
   constructor() {
     console.log('cv-card constructor');
-    effect(() => {
-      this.cv = this.embaucheService.getselectedCv();
-    });
   }
   ngOnDestroy(): void {
     console.log('cv-card destroyed, resetting selectedCv');

@@ -27,12 +27,14 @@ export class CvComponent {
   private cvService = inject(NewEmbaucheService);
 
   cvs: Cv[] = [];
-  /*   selectedCv: Cv | null = null; */
+  selectedCv: Cv | null = null;
   date = new Date();
 
   constructor() {
+    this.cvService.fetchCvs();
     effect(() => {
       this.cvs = this.cvService.getFakeCvs();
+      this.selectedCv = this.cvService.getselectedCv();
     });
     this.logger.logger('je suis le cvComponent');
     this.toastr.info('Bienvenu dans notre CvTech');
