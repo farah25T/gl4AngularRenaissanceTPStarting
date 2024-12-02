@@ -12,13 +12,27 @@ import { AddCvComponent } from "./cv/add-cv/add-cv.component";
 import { CvComponent } from "./cv/cv/cv.component";
 import { DetailsCvComponent } from "./cv/details-cv/details-cv.component";
 import { RhComponent } from "./optimizationPattern/rh/rh.component";
-
+import { MasterDetailsCvComponent } from "./cv/master-details-cv/master-details-cv.component";
+import { CvResolver } from "./cv/resolvers/cv.resolver";
 const routes: Route[] = [
   { path: "login", component: LoginComponent },
   { path: "rh", component: RhComponent },
   {
+    path: 'cvs',
+    component: MasterDetailsCvComponent,
+    children: [
+      {
+        path: ':id',
+        component: DetailsCvComponent,
+      }
+    ]
+  },
+ {
     path: "cv",
     component: CvComponent,
+    resolve: {
+      cvR: CvResolver,  
+    },
   },
   { path: "cv/add", component: AddCvComponent, canActivate: [AuthGuard] },
   { path: "cv/:id", component: DetailsCvComponent },
