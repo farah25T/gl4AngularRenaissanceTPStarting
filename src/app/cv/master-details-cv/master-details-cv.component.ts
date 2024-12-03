@@ -34,7 +34,7 @@ export class MasterDetailsCvComponent {
       next: cv => this.goToCvDetails(cv)
     })
   }
-
+  
   ngOnInit() {}
 
   goToCvDetails(cv: Cv) {
