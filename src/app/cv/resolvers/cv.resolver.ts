@@ -8,15 +8,10 @@ import { Cv } from "../model/cv";
 @Injectable({
   providedIn: "root",
 })
-export class CvResolver implements Resolve<Cv[]|null> {
+export class CvResolver implements Resolve<Cv[]> {
   constructor(private cvService: CvService) {}
 
-  resolve(): Observable<Cv[]|null> {
-    return this.cvService.getCvs().pipe(
-      catchError(() => {
-        console.error("Erreur lors du chargement des CVs");
-        return of(null); 
-      })
-    );
+  resolve(): Observable<Cv[]> {
+    return this.cvService.getCvs()
   }
 }

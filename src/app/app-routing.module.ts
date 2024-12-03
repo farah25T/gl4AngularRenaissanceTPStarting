@@ -15,17 +15,24 @@ import { RhComponent } from "./optimizationPattern/rh/rh.component";
 import { MasterDetailsCvComponent } from "./cv/master-details-cv/master-details-cv.component";
 import { CvResolver } from "./cv/resolvers/cv.resolver";
 import { DetailsCvComponentV2 } from "./cv/details-cv-v2/details-cv.component";
+import { CvDetailsResolver } from "./cv/resolvers/cv-details.resolver";
 const routes: Route[] = [
   { path: "login", component: LoginComponent },
   { path: "rh", component: RhComponent },
   {
     path: 'cvs',
     component: MasterDetailsCvComponent,
+    resolve: {
+      cvR: CvResolver,  
+    },
     children: [
       {
         path: ':id',
         component: DetailsCvComponentV2,
-        runGuardsAndResolvers: 'always',
+        resolve :
+        {
+          cvDetails : CvDetailsResolver
+        }
       }
     ]
   },

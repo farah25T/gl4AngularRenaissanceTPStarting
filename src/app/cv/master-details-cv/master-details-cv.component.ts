@@ -22,12 +22,15 @@ export class MasterDetailsCvComponent {
     private route: ActivatedRoute,
     private toastr: ToastrService
   ) {
-    this.cvs$ = this.cvService.getCvs().pipe(
-      catchError(error => {
-        this.toastr.error('Attention!! Les données sont fictives, problème avec le serveur. Veuillez contacter l\'admin.');
-        return of(this.cvService.getFakeCvs());
-      })
-    );
+    const resolvedCvs = this.route.snapshot.data['cvR'] as Cv[];
+    if (resolvedCvs) {
+      this.cvs$ = of(resolvedCvs); 
+    } else {
+      this.toastr.error(
+        `Attention!! Les données sont fictives, problème avec le serveur. Veuillez contacter l'admin.`
+      );
+      this.cvs$ = of(this.cvService.getFakeCvs()); 
+    }
     this.cvService.selectCv$
     .pipe(takeUntilDestroyed())
     .subscribe({

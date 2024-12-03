@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { APP_ROUTES } from '../../../config/routes.config';
 import { AuthService } from '../../auth/services/auth.service';
-import { catchError, EMPTY, Observable, switchMap } from 'rxjs';
+import { catchError, EMPTY, Observable, of, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-details-cv',
@@ -24,16 +24,14 @@ export class DetailsCvComponentV2 implements OnInit {
     public authService: AuthService
   ) {}
 
-  ngOnInit() {
-    this.cv$ = this.activatedRoute.params.pipe(
-      switchMap((params) => this.cvService.getCvById(+params['id'])), 
-      catchError((err) => {
-        console.log('Erreur lors du chargement du CV', err);
-        this.router.navigate([APP_ROUTES.cv]); 
-        return EMPTY;
-      })
+
+  
+  ngOnInit(): void {
+    this.cv$ = this.activatedRoute.data.pipe(
+      switchMap((data) => of(data['cvDetails']))
     );
   }
+
   deleteCv(cv: Cv) {
     this.cvService.deleteCvById(cv.id).subscribe({
       next: () => {
