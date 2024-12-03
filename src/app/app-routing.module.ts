@@ -1,5 +1,5 @@
 import { NgModule } from "@angular/core";
-import { RouterModule, Route } from "@angular/router";
+import { RouterModule, Route, PreloadAllModules } from "@angular/router";
 import { TodoComponent } from "./todo/todo/todo.component";
 import { MiniWordComponent } from "./directives/mini-word/mini-word.component";
 import { ColorComponent } from "./components/color/color.component";
@@ -12,21 +12,25 @@ import { AddCvComponent } from "./cv/add-cv/add-cv.component";
 import { CvComponent } from "./cv/cv/cv.component";
 import { DetailsCvComponent } from "./cv/details-cv/details-cv.component";
 import { RhComponent } from "./optimizationPattern/rh/rh.component";
+import { CustomPreloadingStrategy } from "./preloading.strategy";
 
 const routes: Route[] = [
   { path: "login", component: LoginComponent },
   { path: "rh", component: RhComponent },
   {
     path: "cv",
-    component: CvComponent,
+    loadChildren: () => import('./cv/cv.module').then((m) => m.CvModule),
+    data : {preload : true}
   },
-  { path: "cv/add", component: AddCvComponent, canActivate: [AuthGuard] },
-  { path: "cv/:id", component: DetailsCvComponent },
   {
     path: "",
     component: FrontComponent,
     children: [
-      { path: "todo", component: TodoComponent },
+      { path: "todo", 
+        component: TodoComponent,
+        loadChildren: () => import('./todo/todo.module').then((m) => m.TodoModule),
+        data : {preload : false}
+      },
       { path: "word", component: MiniWordComponent },
     ],
   },
@@ -39,7 +43,9 @@ const routes: Route[] = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [
+    RouterModule.forRoot(routes,{preloadingStrategy: CustomPreloadingStrategy})
+  ],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}
