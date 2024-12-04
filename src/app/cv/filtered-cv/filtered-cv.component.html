@@ -1,6 +1,7 @@
 <p>filtered-cv works!</p>
 <div class="row">
   <div class="col">
+    <app-autocomplete></app-autocomplete>
     <div class="alert alert-warning">
       {{ date | date : "full" | uppercase }}
     </div>
@@ -43,7 +44,7 @@
         aria-labelledby="home-tab"
         tabindex="0"
       >
-        <app-list [cvs]="senior$ | async"></app-list>
+        <app-list [cvs]="seniors"></app-list>
       </div>
       <div
         class="tab-pane fade"
@@ -52,7 +53,7 @@
         aria-labelledby="profile-tab"
         tabindex="0"
       >
-        <app-list [cvs]="junior$ | async"></app-list>
+        <app-list [cvs]="juniors"></app-list>
       </div>
     </div>
   </div>
