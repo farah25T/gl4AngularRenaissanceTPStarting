@@ -52,6 +52,8 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { AutocompleteComponent } from './cv/autocomplete/autocomplete.component';
 import { SliderComponent } from './rxjs/slider/slider.component';
 import { FilteredCvComponent } from './cv/filtered-cv/filtered-cv.component';
+import { AutocompleteItemComponent } from './cv/autocomplete-item/autocomplete-item.component';
+import { AutocompleteListComponent } from './cv/autocomplete-list/autocomplete-list.component';
 
 @NgModule({
   declarations: [
@@ -92,6 +94,8 @@ import { FilteredCvComponent } from './cv/filtered-cv/filtered-cv.component';
     UserListComponent,
     FilteredCvComponent,
     ProductsComponent,
+    AutocompleteItemComponent,
+    AutocompleteListComponent,
   ],
   bootstrap: [AppComponent],
   imports: [
