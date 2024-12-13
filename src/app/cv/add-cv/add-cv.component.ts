@@ -10,6 +10,7 @@ import { ToastrService } from "ngx-toastr";
 import { APP_ROUTES } from "src/config/routes.config";
 import { Cv } from "../model/cv";
 import { uniqueCinValidator } from "../validators/cin-validator.validator";
+import { cinAgeValidator } from "../validators/cin-age.validator";
 
 @Component({
   selector: "app-add-cv",
@@ -33,7 +34,11 @@ export class AddCvComponent {
     cin: [
       "",
       {
-        validators: [Validators.required, Validators.pattern("[0-9]{8}")],
+        validators: [
+          Validators.required, 
+          Validators.pattern("[0-9]{8}"),
+          // cinAgeValidator(),
+        ],
         asyncValidators: [uniqueCinValidator(this.cvService)],
         updateOn: "blur",
       },
@@ -44,7 +49,9 @@ export class AddCvComponent {
         validators: [Validators.required],
       },
     ],
-  });
+  },
+  { validators: cinAgeValidator() }
+);
 
   ngOnInit() {
     const savedForm = localStorage.getItem('addCvForm');
