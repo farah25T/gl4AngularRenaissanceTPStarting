@@ -44,6 +44,20 @@ export class AddCvComponent {
   });
 
   ngOnInit() {
+    const savedForm = localStorage.getItem('addCvForm');
+    if (savedForm) {
+      this.form.patchValue(JSON.parse(savedForm));
+    }
+    const age = this.form.get("age")?.value ?? 0; 
+    if (age < 18) {
+      this.form.get("path")?.disable();
+      this.form.get("path")?.setValue("");
+    } else {
+      this.form.get("path")?.enable();
+    }
+    this.form.valueChanges.subscribe((formValue) => {
+      localStorage.setItem('addCvForm', JSON.stringify(formValue));
+    });
     this.form.get("age")?.valueChanges.subscribe((age) => {
       if (age !== null && age < 18) { 
         this.form.get("path")?.disable();
@@ -57,6 +71,7 @@ export class AddCvComponent {
   addCv() {
     this.cvService.addCv(this.form.value as Cv).subscribe({
       next: (cv) => {
+        localStorage.removeItem('addCvForm');
         this.router.navigate([APP_ROUTES.cv]);
         this.toastr.success(`Le cv ${cv.firstname} ${cv.name}`);
       },
