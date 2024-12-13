@@ -20,8 +20,11 @@
   >
     Cette Cin est invalide
   </div>
-  Job: <input type="text" class="form-control" formControlName="job" /> Path:
-  <input type="text" class="form-control" formControlName="path" />
+  Cin:
+  <input type="text" class="form-control" formControlName="cin" />
+  Job:
+  <input type="text" class="form-control" formControlName="job" /> Path:
+  <input type="text" class="form-control" formControlName="path"  [attr.placeholder]="age.value < 18 ? 'Désactivé pour les mineurs' : ''" />
 
   <button [disabled]="form.invalid" class="btn btn-primary" (click)="addCv()">
     add cv

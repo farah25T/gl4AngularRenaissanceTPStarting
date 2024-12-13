@@ -25,24 +25,34 @@ export class AddCvComponent {
 
   form = this.formBuilder.group(
     {
-      name: ["", Validators.required],
-      firstname: ["", Validators.required],
-      path: [""],
-      job: ["", Validators.required],
-      cin: [
-        "",
-        {
-          validators: [Validators.required, Validators.pattern("[0-9]{8}")],
-        },
-      ],
-      age: [
-        0,
-        {
-          validators: [Validators.required],
-        },
-      ],
-    },
-  );
+    name: ["", Validators.required],
+    firstname: ["", Validators.required],
+    path: [{ value: "", disabled: true }], // Disabled by default
+    job: ["", Validators.required],
+    cin: [
+      "",
+      {
+        validators: [Validators.required, Validators.pattern("[0-9]{8}")],
+      },
+    ],
+    age: [
+      0,
+      {
+        validators: [Validators.required],
+      },
+    ],
+  });
+
+  ngOnInit() {
+    this.form.get("age")?.valueChanges.subscribe((age) => {
+      if (age !== null && age < 18) { 
+        this.form.get("path")?.disable();
+        this.form.get("path")?.setValue("");
+      } else {
+        this.form.get("path")?.enable();
+      }
+    });
+  }
 
   addCv() {
     this.cvService.addCv(this.form.value as Cv).subscribe({
