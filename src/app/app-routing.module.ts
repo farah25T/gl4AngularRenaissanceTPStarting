@@ -16,9 +16,11 @@ import { MasterDetailsCvComponent } from "./cv/master-details-cv/master-details-
 import { CvResolver } from "./cv/resolvers/cv.resolver";
 import { DetailsCvComponentV2 } from "./cv/details-cv-v2/details-cv.component";
 import { CvDetailsResolver } from "./cv/resolvers/cv-details.resolver";
+import { FilteredCvComponent } from "./cv/filtered-cv/filtered-cv.component";
+import { ProductsComponent } from "./products/products.component";
 const routes: Route[] = [
-  { path: "login", component: LoginComponent },
-  { path: "rh", component: RhComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'rh', component: RhComponent },
   {
     path: 'cvs',
     component: MasterDetailsCvComponent,
@@ -36,29 +38,34 @@ const routes: Route[] = [
       }
     ]
   },
- {
+  {
     path: "cv",
     component: CvComponent,
     resolve: {
       cvR: CvResolver,  
     },
   },
-  { path: "cv/add", component: AddCvComponent, canActivate: [AuthGuard] },
-  { path: "cv/:id", component: DetailsCvComponent },
   {
-    path: "",
+    path: 'cvf',
+    component: FilteredCvComponent,
+  },
+  { path: 'cv/add', component: AddCvComponent, canActivate: [AuthGuard] },
+  { path: 'cv/:id', component: DetailsCvComponent },
+  { path: 'products', component: ProductsComponent },
+  {
+    path: '',
     component: FrontComponent,
     children: [
-      { path: "todo", component: TodoComponent },
-      { path: "word", component: MiniWordComponent },
+      { path: 'todo', component: TodoComponent },
+      { path: 'word', component: MiniWordComponent },
     ],
   },
   {
-    path: "admin",
+    path: 'admin',
     component: AdminComponent,
-    children: [{ path: "color", component: ColorComponent }],
+    children: [{ path: 'color', component: ColorComponent }],
   },
-  { path: "**", component: NF404Component },
+  { path: '**', component: NF404Component },
 ];
 
 @NgModule({
