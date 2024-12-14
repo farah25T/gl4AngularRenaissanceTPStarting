@@ -2,8 +2,8 @@
 import { Directive, HostBinding, HostListener } from '@angular/core';
 
 @Directive({
-  selector: 'input[appArcEnCiel]',  
-  standalone: true,
+  selector: 'input[type="text"][appArcEnCiel]',  
+    standalone: true,
 })
 export class ArcEnCielDirective {
   private colors: string[] = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet'];
