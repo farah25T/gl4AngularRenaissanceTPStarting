@@ -54,7 +54,8 @@ import { SliderComponent } from './rxjs/slider/slider.component';
 import { FilteredCvComponent } from './cv/filtered-cv/filtered-cv.component';
 import { AutocompleteItemComponent } from './cv/autocomplete-item/autocomplete-item.component';
 import { AutocompleteListComponent } from './cv/autocomplete-list/autocomplete-list.component';
-
+import {MasterDetailsCvComponent} from "./cv/master-details-cv/master-details-cv.component"
+import { DetailsCvComponentV2 } from "./cv/details-cv-v2/details-cv.component";
 @NgModule({
   declarations: [
     AppComponent,
@@ -94,6 +95,8 @@ import { AutocompleteListComponent } from './cv/autocomplete-list/autocomplete-l
     UserListComponent,
     FilteredCvComponent,
     ProductsComponent,
+    MasterDetailsCvComponent,
+    DetailsCvComponentV2,
     AutocompleteItemComponent,
     AutocompleteListComponent,
   ],
