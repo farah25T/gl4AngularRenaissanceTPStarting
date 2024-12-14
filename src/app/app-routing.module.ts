@@ -18,6 +18,7 @@ import { DetailsCvComponentV2 } from "./cv/details-cv-v2/details-cv.component";
 import { CvDetailsResolver } from "./cv/resolvers/cv-details.resolver";
 import { FilteredCvComponent } from "./cv/filtered-cv/filtered-cv.component";
 import { ProductsComponent } from "./products/products.component";
+import { CustomPreloadingStrategy } from "./preloading.strategy";
 const routes: Route[] = [
   { path: 'login', component: LoginComponent },
   { path: 'rh', component: RhComponent },
@@ -44,6 +45,8 @@ const routes: Route[] = [
     resolve: {
       cvR: CvResolver,  
     },
+    loadChildren: () => import('./cv/cv.module').then((m) => m.CvModule),
+    data : {preload : true}
   },
   {
     path: 'cvf',
